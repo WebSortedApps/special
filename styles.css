@@ -135,6 +135,180 @@ body::-webkit-scrollbar-thumb:hover { background-color: #6C5CE7cc; }
 .ws-divider-bottom { bottom: 0; }
 .section { position: relative; overflow: hidden; }
 
+/* Section Frames */
+.ws-frame {
+  position: relative; --frame-color: currentColor;
+  --frame-thickness-base: 2px; --frame-thickness: var(--frame-thickness-base);
+  --frame-radius: 16px;
+  border-radius: var(--frame-radius); isolation: isolate;
+}
+.ws-frame > * { position: relative; z-index: 2; }
+
+@keyframes wsFrameLaserSpin { to { transform: rotate(1turn); } }
+.ws-frame-laser-spin { padding: calc(var(--frame-thickness) + 2px); overflow: hidden; }
+.ws-frame-laser-spin::before {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  background: conic-gradient(from 0deg, transparent 0deg, var(--frame-color) 40deg, transparent 120deg, transparent 240deg, var(--frame-color) 280deg, transparent 360deg);
+  animation: wsFrameLaserSpin calc(4s / var(--frame-anim-speed, 1)) linear infinite;
+  padding: var(--frame-thickness);
+  border-radius: var(--frame-radius);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes wsFrameBlazeTravel { to { offset-distance: 100%; } }
+.ws-frame-blaze-lines { padding: calc(var(--frame-thickness) + 2px); }
+.ws-frame-blaze-lines::before, .ws-frame-blaze-lines::after {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: var(--frame-blaze-length, 30%); height: calc(var(--frame-thickness) + 2px);
+  background: linear-gradient(90deg, transparent 0%, var(--frame-color) 50%, transparent 100%);
+  box-shadow: 0 0 14px var(--frame-color), 0 0 28px var(--frame-color);
+  border-radius: 999px;
+  offset-path: inset(0 round var(--frame-radius));
+  offset-rotate: auto;
+  animation: wsFrameBlazeTravel calc(4s / var(--frame-anim-speed, 1)) linear infinite;
+  pointer-events: none; z-index: 0;
+}
+.ws-frame-blaze-lines::after { animation-delay: calc(2s / var(--frame-anim-speed, 1)); }
+
+@keyframes wsFrameRipple { 0% { transform: scale(1); opacity: 0.9; } 70% { transform: scale(1.04); opacity: 0; } 100% { transform: scale(1.04); opacity: 0; } }
+.ws-frame-ripple-pulse { padding: var(--frame-thickness); }
+.ws-frame-ripple-pulse::before, .ws-frame-ripple-pulse::after {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  border: var(--frame-thickness) solid var(--frame-color);
+  border-radius: var(--frame-radius);
+  pointer-events: none;
+  animation: wsFrameRipple calc(2.4s / var(--frame-anim-speed, 1)) cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+}
+.ws-frame-ripple-pulse::after { animation-delay: calc(1.2s / var(--frame-anim-speed, 1)); }
+
+@keyframes wsFrameNeon {
+  0%,100% { box-shadow: 0 0 0 var(--frame-thickness) var(--frame-color), 0 0 12px var(--frame-color); }
+  50% { box-shadow: 0 0 0 var(--frame-thickness) var(--frame-color), 0 0 28px var(--frame-color), 0 0 48px var(--frame-color); }
+}
+.ws-frame-neon-breathe { animation: wsFrameNeon calc(2.8s / var(--frame-anim-speed, 1)) ease-in-out infinite; }
+
+@keyframes wsFrameDashFlow { to { background-position: 40px 0, -40px 100%, 0 -40px, 100% 40px; } }
+.ws-frame-dashing-lights { padding: calc(var(--frame-thickness) + 2px); }
+.ws-frame-dashing-lights::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  border-radius: var(--frame-radius);
+  background-image: linear-gradient(90deg, var(--frame-color) 50%, transparent 50%), linear-gradient(90deg, var(--frame-color) 50%, transparent 50%), linear-gradient(0deg, var(--frame-color) 50%, transparent 50%), linear-gradient(0deg, var(--frame-color) 50%, transparent 50%);
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-size: 20px var(--frame-thickness), 20px var(--frame-thickness), var(--frame-thickness) 20px, var(--frame-thickness) 20px;
+  background-position: 0 0, 0 100%, 0 0, 100% 0;
+  animation: wsFrameDashFlow calc(1.2s / var(--frame-anim-speed, 1)) linear infinite;
+}
+
+@keyframes wsFrameGradientFlow { to { background-position: 300% 0; } }
+.ws-frame-gradient-flow { padding: var(--frame-thickness); }
+.ws-frame-gradient-flow::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; padding: var(--frame-thickness);
+  background: linear-gradient(90deg, var(--frame-color), #ffffff, var(--frame-color), #ffffff, var(--frame-color));
+  background-size: 300% 100%;
+  animation: wsFrameGradientFlow calc(3.2s / var(--frame-anim-speed, 1)) linear infinite;
+  border-radius: var(--frame-radius);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes wsFrameScan { 0%,100% { top: 0; opacity: 1; } 50% { top: 100%; opacity: 0.35; } }
+.ws-frame-tech-scan {
+  padding: calc(var(--frame-thickness) + 2px);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--frame-color) 25%, transparent);
+  overflow: hidden;
+}
+.ws-frame-tech-scan::before {
+  content: ''; position: absolute; left: 0; right: 0; height: 2px; top: 0;
+  background: var(--frame-color); box-shadow: 0 0 16px var(--frame-color), 0 0 32px var(--frame-color);
+  animation: wsFrameScan calc(2.6s / var(--frame-anim-speed, 1)) cubic-bezier(0.4, 0, 0.4, 1) infinite;
+  pointer-events: none; z-index: 3;
+}
+
+.ws-frame-corner-brackets { padding: 12px; }
+.ws-frame-corner-brackets::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    linear-gradient(var(--frame-color), var(--frame-color)) top left / 28px var(--frame-thickness) no-repeat,
+    linear-gradient(var(--frame-color), var(--frame-color)) top left / var(--frame-thickness) 28px no-repeat,
+    linear-gradient(var(--frame-color), var(--frame-color)) top right / 28px var(--frame-thickness) no-repeat,
+    linear-gradient(var(--frame-color), var(--frame-color)) top right / var(--frame-thickness) 28px no-repeat,
+    linear-gradient(var(--frame-color), var(--frame-color)) bottom left / 28px var(--frame-thickness) no-repeat,
+    linear-gradient(var(--frame-color), var(--frame-color)) bottom left / var(--frame-thickness) 28px no-repeat,
+    linear-gradient(var(--frame-color), var(--frame-color)) bottom right / 28px var(--frame-thickness) no-repeat,
+    linear-gradient(var(--frame-color), var(--frame-color)) bottom right / var(--frame-thickness) 28px no-repeat;
+  pointer-events: none; z-index: 0;
+}
+
+.ws-frame-dotted { padding: 6px; }
+.ws-frame-dotted::before {
+  content: ''; position: absolute; inset: 0;
+  border: calc(var(--frame-thickness) + 1px) dotted var(--frame-color);
+  border-radius: var(--frame-radius);
+  pointer-events: none; z-index: 0;
+}
+
+.ws-frame-blueprint {
+  padding: 16px;
+  outline: var(--frame-thickness) dashed var(--frame-color); outline-offset: -1px;
+  background-image: linear-gradient(to right, color-mix(in srgb, var(--frame-color) 12%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in srgb, var(--frame-color) 12%, transparent) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.ws-frame-blueprint::before, .ws-frame-blueprint::after {
+  content: ''; position: absolute; width: 10px; height: 10px;
+  border: var(--frame-thickness) solid var(--frame-color);
+  transform: rotate(45deg);
+  pointer-events: none; z-index: 2;
+}
+.ws-frame-blueprint::before { top: -5px; left: -5px; }
+.ws-frame-blueprint::after  { bottom: -5px; right: -5px; }
+
+.ws-frame-retro-crt {
+  padding: calc(var(--frame-thickness) + 6px);
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 0 var(--frame-thickness) var(--frame-color),
+    -4px 0 0 calc(var(--frame-thickness) - 1px) rgba(255, 45, 149, 0.9),
+     4px 0 0 calc(var(--frame-thickness) - 1px) rgba(0, 229, 255, 0.85);
+}
+.ws-frame-retro-crt::before {
+  content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  border-radius: inherit;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,0.09) 0, rgba(255,255,255,0.09) 1px, transparent 1px, transparent 3px);
+}
+.ws-frame-retro-crt::after {
+  content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.35) 100%);
+}
+
+.ws-frame-retro-arcade {
+  padding: calc(var(--frame-thickness) * 2 + 6px);
+  --frame-radius: 0px;
+  box-shadow: 0 0 0 var(--frame-thickness) var(--frame-color), 0 0 0 calc(var(--frame-thickness) + 3px) #000, 0 0 0 calc(var(--frame-thickness) * 2 + 3px) var(--frame-color);
+  image-rendering: pixelated;
+}
+
+@media (max-width: 640px) {
+  .ws-frame { --frame-thickness: max(1px, calc(var(--frame-thickness-base) * 0.75)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-frame-laser-spin::before,
+  .ws-frame-blaze-lines::before, .ws-frame-blaze-lines::after,
+  .ws-frame-ripple-pulse::before, .ws-frame-ripple-pulse::after,
+  .ws-frame-neon-breathe,
+  .ws-frame-dashing-lights::before,
+  .ws-frame-gradient-flow::before,
+  .ws-frame-tech-scan::before {
+    animation: none;
+  }
+}
+
 /* Animated Text */
 @keyframes wsTyping { from { width: 0; } to { width: 100%; } }
 @keyframes wsBlink { 0%,100% { border-color: transparent; } 50% { border-color: currentColor; } }
